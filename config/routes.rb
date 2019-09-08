@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  # devise_for :users
-  resources :sessions, only: %i[create destroy]
+  # not sure why below line is mandatory
+  devise_for :users, skip: %i[sessions registrations passwords]
+  resource :sessions, only: %i[create destroy]
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
