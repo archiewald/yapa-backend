@@ -10,7 +10,7 @@ gem 'sqlite3'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -27,6 +27,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'rubocop', require: false
 
+gem 'devise'
+gem 'simple_token_authentication', '~> 1.0' # see semver.org
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS),
 # making cross-origin AJAX possible
 # gem 'rack-cors'
@@ -36,6 +39,7 @@ group :development, :test do
   # get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 end
+
 
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'

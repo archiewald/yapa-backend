@@ -3,3 +3,8 @@ Style/FrozenStringLiteralComment:
 
 Style/Documentation:
   Enabled: false
+
+AllCops:
+  Exclude:
+    - "db/migrate/*"
+    - "db/schema.rb"
