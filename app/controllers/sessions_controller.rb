@@ -1,4 +1,8 @@
 class SessionsController < ApplicationController
+  def show
+    current_user ? head(:ok) : head(:unauothorized)
+  end
+
   def create
     @user = User.find_by(email: params[:email])
     if @user&.valid_password?(params[:password])
