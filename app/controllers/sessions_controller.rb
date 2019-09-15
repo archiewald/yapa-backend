@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
 
   def create
     @user = User.find_by(email: params[:email])
-    if @user&.valid_password?(params[:password])
+    if @user&.valid_password?(params[:password]) && @user&.confirmed_at
       render(:create, status: :created)
     else
       head(:unauthorized)

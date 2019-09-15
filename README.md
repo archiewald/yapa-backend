@@ -1,5 +1,11 @@
 # README
 
+To catch emails:
+
+1. `gem install mailcatcher`
+1. `mailcatcher`
+1. Go to http://127.0.0.1:1080/
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
