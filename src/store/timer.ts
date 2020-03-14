@@ -1,36 +1,41 @@
 import { StoreonModule } from "storeon";
 import { addMilliseconds, differenceInMilliseconds } from "date-fns";
+import { minutesToMs } from "../utils/timeUtils";
 
 export type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
 
-const POMODORO_MS = 20 * 60 * 1000;
+const MODE_TIMES: { [Mode in TimerMode]: number } = {
+  pomodoro: minutesToMs(20),
+  shortBreak: minutesToMs(5),
+  longBreak: minutesToMs(15)
+};
 
 export interface TimerState {
   timer: {
     interval?: NodeJS.Timeout;
     endTime?: Date;
-    pauseTimeCounter?: number;
     counter: number;
-    mode?: TimerMode;
+    mode: TimerMode;
   };
 }
 
 export interface TimerEvents {
-  start: undefined;
-  pause: undefined;
-  reset: undefined;
-  update: undefined;
-  setMode: TimerMode;
+  timerStart: undefined;
+  timerPause: undefined;
+  timerReset: undefined;
+  timerUpdate: undefined;
+  timerSetMode: TimerMode;
 }
 
 export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
   store.on("@init", () => ({
     timer: {
-      counter: POMODORO_MS
+      mode: "pomodoro",
+      counter: MODE_TIMES.pomodoro
     }
   }));
 
-  store.on("update", ({ timer }) => {
+  store.on("timerUpdate", ({ timer }) => {
     const { endTime } = timer;
     const counter = differenceInMilliseconds(endTime!, new Date());
 
@@ -42,16 +47,16 @@ export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
     };
   });
 
-  store.on("start", ({ timer }) => {
+  store.on("timerStart", ({ timer }) => {
     if (timer.interval) return { timer };
 
     const endTime = addMilliseconds(
       new Date(),
-      timer.pauseTimeCounter || POMODORO_MS
+      timer.counter || MODE_TIMES[timer.mode]
     );
 
     const interval = setInterval(() => {
-      store.dispatch("update");
+      store.dispatch("timerUpdate");
     }, 1000);
 
     return {
@@ -63,24 +68,21 @@ export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
     };
   });
 
-  store.on("pause", ({ timer }) => {
-    const { counter, interval } = timer;
+  store.on("timerPause", ({ timer }) => {
+    const { interval } = timer;
     if (!interval) return { timer };
-
-    const pauseTimeCounter = counter;
 
     clearInterval(interval);
 
     return {
       timer: {
         ...timer,
-        interval: undefined,
-        pauseTimeCounter
+        interval: undefined
       }
     };
   });
 
-  store.on("reset", ({ timer }) => {
+  store.on("timerReset", ({ timer }) => {
     const { interval } = timer;
 
     if (interval) {
@@ -89,7 +91,26 @@ export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
 
     return {
       timer: {
-        counter: POMODORO_MS
+        ...timer,
+        counter: MODE_TIMES[timer.mode],
+        interval: undefined
+      }
+    };
+  });
+
+  store.on("timerSetMode", ({ timer }, mode) => {
+    const { interval } = timer;
+
+    if (interval) {
+      clearInterval(interval);
+    }
+
+    return {
+      timer: {
+        ...timer,
+        mode,
+        counter: MODE_TIMES[mode],
+        interval: undefined
       }
     };
   });

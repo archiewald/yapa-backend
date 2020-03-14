@@ -12,3 +12,7 @@ export function renderTimeString(timeInMs: number) {
   const seconds = Math.round((timeInMs % 60000) / 1000);
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
+
+export function minutesToMs(minutes: number) {
+  return minutes * 60 * 1000;
+}

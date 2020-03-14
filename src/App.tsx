@@ -11,24 +11,47 @@ export const App: React.FC = () => {
 
   return (
     <div>
-      <h1>{renderTimeString(counter)}</h1>
       <button
         onClick={() => {
-          dispatch("start");
+          dispatch("timerSetMode", "pomodoro");
+        }}
+      >
+        Pomodoro
+      </button>
+      <button
+        onClick={() => {
+          dispatch("timerSetMode", "shortBreak");
+        }}
+      >
+        Short break
+      </button>
+      <button
+        onClick={() => {
+          dispatch("timerSetMode", "longBreak");
+        }}
+      >
+        Long break
+      </button>
+
+      <h1>{renderTimeString(counter)}</h1>
+
+      <button
+        onClick={() => {
+          dispatch("timerStart");
         }}
       >
         Start
       </button>
       <button
         onClick={() => {
-          dispatch("pause");
+          dispatch("timerPause");
         }}
       >
         Pause
       </button>
       <button
         onClick={() => {
-          dispatch("reset");
+          dispatch("timerReset");
         }}
       >
         Reset
