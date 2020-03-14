@@ -1,6 +1,6 @@
 {
   "name": "Yet Another Pomodoro App",
-  "short_name": "YAPA",
+  "short_name": "Yet Another Pomodoro App",
   "theme_color": "#ff6e64",
   "background_color": "#ff6e64",
   "display": "standalone",
