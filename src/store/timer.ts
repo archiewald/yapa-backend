@@ -5,7 +5,7 @@ import { minutesToMs } from "../utils/timeUtils";
 export type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
 
 const MODE_TIMES: { [Mode in TimerMode]: number } = {
-  pomodoro: minutesToMs(20),
+  pomodoro: minutesToMs(40),
   shortBreak: minutesToMs(5),
   longBreak: minutesToMs(15)
 };
@@ -14,6 +14,7 @@ export interface TimerState {
   timer: {
     interval?: NodeJS.Timeout;
     endTime?: Date;
+    done: boolean;
     counter: number;
     mode: TimerMode;
   };
@@ -31,17 +32,25 @@ export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
   store.on("@init", () => ({
     timer: {
       mode: "pomodoro",
-      counter: MODE_TIMES.pomodoro
+      counter: MODE_TIMES.pomodoro,
+      done: false
     }
   }));
 
   store.on("timerUpdate", ({ timer }) => {
     const { endTime } = timer;
     const counter = differenceInMilliseconds(endTime!, new Date());
+    const done = counter <= 0;
+
+    if (done) {
+      alert("🍅");
+      return store.dispatch("timerReset");
+    }
 
     return {
       timer: {
         ...timer,
+        done,
         counter
       }
     };
