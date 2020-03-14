@@ -1,35 +1,38 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import { useStoreon } from "storeon/react";
-import { AppState, AppEvents } from "./store/store";
+import { AppState, AppEvents } from "./store";
+import { renderTimeString } from "./utils/timeUtils";
 
-function App() {
-  const { counter, dispatch } = useStoreon<AppState, AppEvents>("counter");
+export const App: React.FC = () => {
+  const {
+    timer: { counter },
+    dispatch
+  } = useStoreon<AppState, AppEvents>("timer");
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{counter}</p>
-        <button
-          onClick={() => {
-            dispatch("start");
-          }}
-        >
-          Start counter
-        </button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>{renderTimeString(counter)}</h1>
+      <button
+        onClick={() => {
+          dispatch("start");
+        }}
+      >
+        Start
+      </button>
+      <button
+        onClick={() => {
+          dispatch("pause");
+        }}
+      >
+        Pause
+      </button>
+      <button
+        onClick={() => {
+          dispatch("reset");
+        }}
+      >
+        Reset
+      </button>
     </div>
   );
-}
-
-export default App;
+};

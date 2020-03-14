@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { StoreContext } from "storeon/react";
-import { store } from "./store/store";
+import { store } from "./store";
+import { App } from "./App";
 
 ReactDOM.render(
   <StoreContext.Provider value={store}>
