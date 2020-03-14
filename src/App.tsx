@@ -32,9 +32,7 @@ export const App: React.FC = () => {
       >
         Long break
       </button>
-
       <h1>{renderTimeString(counter)}</h1>
-
       <button
         onClick={() => {
           dispatch("timerStart");
@@ -56,6 +54,17 @@ export const App: React.FC = () => {
       >
         Reset
       </button>
+      <p>
+        🍅 icon made by{" "}
+        <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
+          Freepik
+        </a>{" "}
+        from{" "}
+        <a href="https://www.flaticon.com/" title="Flaticon">
+          {" "}
+          www.flaticon.com
+        </a>
+      </p>
     </div>
   );
 };
