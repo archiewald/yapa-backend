@@ -1,6 +1,7 @@
 import { StoreonModule } from "storeon";
 import { addMilliseconds, differenceInMilliseconds } from "date-fns";
 import { minutesToMs } from "../utils/timeUtils";
+import { showNotification } from "../notifications";
 
 export type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
 
@@ -38,12 +39,12 @@ export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
   }));
 
   store.on("timerUpdate", ({ timer }) => {
-    const { endTime } = timer;
+    const { endTime, mode } = timer;
     const counter = differenceInMilliseconds(endTime!, new Date());
     const done = counter <= 0;
 
     if (done) {
-      alert("🍅");
+      notifyTimerFinished(mode);
       return store.dispatch("timerReset");
     }
 
@@ -124,3 +125,17 @@ export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
     };
   });
 };
+
+async function notifyTimerFinished(mode: TimerMode) {
+  switch (mode) {
+    case "pomodoro":
+      await showNotification("Pomodoro finished!");
+      return;
+    case "shortBreak":
+      await showNotification("Short break finished!");
+      return;
+    case "longBreak":
+      await showNotification("Long break finished!");
+      return;
+  }
+}

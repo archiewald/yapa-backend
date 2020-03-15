@@ -1,5 +1,7 @@
 // https://developers.google.com/web/fundamentals/push-notifications/subscribing-a-user
 
+import pomodoroIcon from "./assets/tomato-icon.png";
+
 export function askPermission() {
   return new Promise(function(resolve, reject) {
     const permissionResult = Notification.requestPermission(function(result) {
@@ -16,10 +18,12 @@ export function askPermission() {
   });
 }
 
-export async function showNotification() {
+export async function showNotification(message: string) {
   const registration = await navigator.serviceWorker.getRegistration();
 
   if (registration) {
-    registration.showNotification("HI :)");
+    registration.showNotification(message, {
+      icon: pomodoroIcon
+    });
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { useStoreon } from "storeon/react";
 import { AppState, AppEvents } from "./store";
 import { renderTimeString } from "./utils/timeUtils";
-import { askPermission, showNotification } from "./notifications/askPermission";
+import { askPermission, showNotification } from "./notifications";
 
 export const App: React.FC = () => {
   const {
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
 
       <button
         onClick={() => {
-          showNotification();
+          showNotification("TEST");
         }}
       >
         test notification
