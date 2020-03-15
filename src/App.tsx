@@ -2,6 +2,7 @@ import React from "react";
 import { useStoreon } from "storeon/react";
 import { AppState, AppEvents } from "./store";
 import { renderTimeString } from "./utils/timeUtils";
+import { askPermission, showNotification } from "./notifications/askPermission";
 
 export const App: React.FC = () => {
   const {
@@ -65,6 +66,21 @@ export const App: React.FC = () => {
           www.flaticon.com
         </a>
       </p>
+      <button
+        onClick={() => {
+          askPermission();
+        }}
+      >
+        request Push notifications permission
+      </button>
+
+      <button
+        onClick={() => {
+          showNotification();
+        }}
+      >
+        test notification
+      </button>
     </div>
   );
 };
