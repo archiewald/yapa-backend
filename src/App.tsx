@@ -1,86 +1,33 @@
 import React from "react";
-import { useStoreon } from "storeon/react";
-import { AppState, AppEvents } from "./store";
-import { renderTimeString } from "./utils/timeUtils";
-import { askPermission, showNotification } from "./notifications";
+import { Switch, Route, Link, BrowserRouter } from "react-router-dom";
+
+import { Dashboard } from "pages/dashboard/Dashboard";
+import { Settings } from "pages/settings/Settings";
 
 export const App: React.FC = () => {
-  const {
-    timer: { counter },
-    dispatch
-  } = useStoreon<AppState, AppEvents>("timer");
-
   return (
-    <div>
-      <button
-        onClick={() => {
-          dispatch("timerSetMode", "pomodoro");
-        }}
-      >
-        Pomodoro
-      </button>
-      <button
-        onClick={() => {
-          dispatch("timerSetMode", "shortBreak");
-        }}
-      >
-        Short break
-      </button>
-      <button
-        onClick={() => {
-          dispatch("timerSetMode", "longBreak");
-        }}
-      >
-        Long break
-      </button>
-      <h1>{renderTimeString(counter)}</h1>
-      <button
-        onClick={() => {
-          dispatch("timerStart");
-        }}
-      >
-        Start
-      </button>
-      <button
-        onClick={() => {
-          dispatch("timerPause");
-        }}
-      >
-        Pause
-      </button>
-      <button
-        onClick={() => {
-          dispatch("timerReset");
-        }}
-      >
-        Reset
-      </button>
-      <p>
-        🍅 icon made by{" "}
-        <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
-          Freepik
-        </a>{" "}
-        from{" "}
-        <a href="https://www.flaticon.com/" title="Flaticon">
-          {" "}
-          www.flaticon.com
-        </a>
-      </p>
-      <button
-        onClick={() => {
-          askPermission();
-        }}
-      >
-        request Push notifications permission
-      </button>
+    <BrowserRouter basename="yapa-frontend">
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/settings">Settings</Link>
+            </li>
+          </ul>
+        </nav>
 
-      <button
-        onClick={() => {
-          showNotification("TEST");
-        }}
-      >
-        test notification
-      </button>
-    </div>
+        <Switch>
+          <Route path="/settings">
+            <Settings />
+          </Route>
+          <Route path="/">
+            <Dashboard />
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 };
