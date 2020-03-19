@@ -1,7 +1,9 @@
 import { StoreonModule } from "storeon";
 import { addMilliseconds, differenceInMilliseconds } from "date-fns";
-import { minutesToMs } from "../utils/timeUtils";
-import { showNotification } from "../notifications";
+
+import { minutesToMs, msToFullMinutes } from "utils/timeUtils";
+import { showNotification } from "notifications";
+import { setBadge } from "badge";
 
 export type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
 
@@ -42,6 +44,8 @@ export const TimerModule: StoreonModule<TimerState, TimerEvents> = store => {
     const { endTime, mode } = timer;
     const counter = differenceInMilliseconds(endTime!, new Date());
     const done = counter <= 0;
+
+    setBadge(msToFullMinutes(counter));
 
     if (done) {
       notifyTimerFinished(mode);

@@ -16,3 +16,7 @@ export function renderTimeString(timeInMs: number) {
 export function minutesToMs(minutes: number) {
   return minutes * 60 * 1000;
 }
+
+export function msToFullMinutes(ms: number) {
+  return Math.floor(ms / 60000);
+}
