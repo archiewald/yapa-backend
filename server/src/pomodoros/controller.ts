@@ -1,36 +1,29 @@
 import * as express from "express";
 import { Pomodoro } from "./Pomodoro";
-import { Controller } from "types/controller";
+import { Controller } from "types/Controller";
+import pomodoroModel from "./model";
 
 class PomodorosController implements Controller {
   public path = "/pomodoros";
   public router = express.Router();
-
-  private pomodoros: Pomodoro[] = [
-    {
-      id: "x",
-      userId: "y",
-      startDate: "2020-03-22T09:44:31Z",
-      duration: 1000 * 60 * 20
-    }
-  ];
 
   constructor() {
     this.initializeRoutes();
   }
 
   public initializeRoutes() {
-    this.router.get(this.path, this.getAllPomodoros);
-    this.router.post(this.path, this.createAPomodoro);
+    this.router.get(this.path, this.getAll);
+    this.router.post(this.path, this.create);
   }
 
-  getAllPomodoros: express.Handler = (_request, response) => {
-    response.send(this.pomodoros);
+  getAll: express.Handler = async (_request, response) => {
+    const pomodoros = await pomodoroModel.find();
+    response.send(pomodoros);
   };
 
-  createAPomodoro: express.Handler = (request, response) => {
+  create: express.Handler = async (request, response) => {
     const pomodoro: Pomodoro = request.body;
-    this.pomodoros.push(pomodoro);
+    await new pomodoroModel(pomodoro).save();
     response.send(pomodoro);
   };
 }
