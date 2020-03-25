@@ -1,6 +1,6 @@
 import * as express from "express";
 import { Pomodoro } from "./Pomodoro";
-import { Controller } from "types/Controller";
+import { Controller } from "../types/Controller";
 import pomodoroModel from "./model";
 
 class PomodorosController implements Controller {

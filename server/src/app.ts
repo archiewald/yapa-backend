@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as mongoose from "mongoose";
 
-import { Controller } from "types/Controller";
+import { Controller } from "./types/Controller";
 
 class App {
   public app: express.Application;
