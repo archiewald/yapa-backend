@@ -4,7 +4,6 @@
   "engines": {
     "node": "12.16.1"
   },
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "ts-node ./src/server.ts",
