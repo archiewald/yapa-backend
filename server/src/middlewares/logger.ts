@@ -1,6 +1,6 @@
 import * as express from "express";
 
-export default function loggerMiddleware(
+export function loggerMiddleware(
   request: express.Request,
   _response: express.Response,
   next: express.NextFunction

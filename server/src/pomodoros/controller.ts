@@ -1,9 +1,9 @@
 import * as express from "express";
 import { Pomodoro } from "./Pomodoro";
 import { Controller } from "../types/Controller";
-import pomodoroModel from "./model";
+import { pomodoroModel } from "./model";
 
-class PomodorosController implements Controller {
+export class PomodorosController implements Controller {
   public path = "/pomodoros";
   public router = express.Router();
 
@@ -27,5 +27,3 @@ class PomodorosController implements Controller {
     response.send(pomodoro);
   };
 }
-
-export default PomodorosController;

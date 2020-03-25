@@ -3,7 +3,7 @@ import * as mongoose from "mongoose";
 
 import { Controller } from "./types/Controller";
 
-class App {
+export class App {
   public app: express.Application;
 
   constructor(middlewares: express.Handler[], controllers: Controller[]) {
@@ -38,5 +38,3 @@ class App {
     mongoose.connect(MONGO_URL!, { useNewUrlParser: true });
   }
 }
-
-export default App;

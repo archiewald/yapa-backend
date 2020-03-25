@@ -7,9 +7,7 @@ const pomodoroSchema = new mongoose.Schema<Pomodoro>({
   duration: Number
 });
 
-const pomodoroModel = mongoose.model<Pomodoro & mongoose.Document>(
+export const pomodoroModel = mongoose.model<Pomodoro & mongoose.Document>(
   "Pomodoro",
   pomodoroSchema
 );
-
-export default pomodoroModel;

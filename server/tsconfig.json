@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "es2017",
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
     "module": "commonjs",
+    "moduleResolution": "node",
     "outDir": "./build",
     "baseUrl": "./src",
     "strict": true
