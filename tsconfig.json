@@ -6,7 +6,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./build",
-    "baseUrl": "./src",
+    // "baseUrl": "./src",
     "strict": true
   },
   "include": ["src/**/*.ts"],

@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as mongoose from "mongoose";
+import * as session from "express-session";
 
 import { Controller } from "./types/Controller";
 
