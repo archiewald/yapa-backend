@@ -14,7 +14,7 @@ export class App {
     this.initializeControllers(controllers);
   }
 
-  public listen(port: number) {
+  public listen(port: string) {
     this.app.listen(port, () => {
       console.log(`App listening on the port ${port}`);
     });
