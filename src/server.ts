@@ -5,18 +5,10 @@ import "dotenv/config";
 import { App } from "./app";
 import { PomodorosController } from "./pomodoros/controller";
 import { loggerMiddleware } from "./middlewares/logger";
-import * as session from "express-session";
+import { sessionMiddleware } from "./middlewares/sessionMiddleware";
 
 const middlewares = [
-  session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 30
-      //   secure: true
-    }
-  }),
+  sessionMiddleware(),
   loggerMiddleware,
   bodyParser.json(),
   cors()

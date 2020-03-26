@@ -16,7 +16,8 @@ export class PomodorosController implements Controller {
     this.router.post(this.path, this.create);
   }
 
-  getAll: express.Handler = async (_request, response) => {
+  getAll: express.Handler = async (request, response) => {
+    console.log(request.sessionID);
     const pomodoros = await pomodoroModel.find();
     response.send(pomodoros);
   };
