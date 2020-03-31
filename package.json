@@ -8,17 +8,13 @@
   "scripts": {
     "build": "tsc",
     "start": "node build/server.js",
+    "start:inspect": "node --inspect build/server.js",
     "start:watch": "nodemon"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/cors": "^2.8.6",
-    "@types/express": "^4.17.3",
-    "@types/express-session": "^1.17.0",
-    "@types/mongoose": "^5.7.7",
-    "@types/passport": "^1.0.3",
-    "@types/passport-local": "^1.0.33",
+    "bcrypt": "^4.0.1",
     "connect-mongo": "^3.2.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -27,7 +23,16 @@
     "mongoose": "^5.9.5",
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0",
-    "typescript": "^3.8.3"
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.3",
+    "@types/express-session": "^1.17.0",
+    "@types/mongoose": "^5.7.7",
+    "@types/passport": "^1.0.3",
+    "@types/passport-local": "^1.0.33",
+    "@types/bcrypt": "^3.0.0"
   }
 }

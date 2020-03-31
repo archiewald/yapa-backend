@@ -17,9 +17,12 @@ export class PomodorosController implements Controller {
   }
 
   getAll: express.Handler = async (request, response) => {
-    console.log(request.sessionID);
-    const pomodoros = await pomodoroModel.find();
-    response.send(pomodoros);
+    if (request.isAuthenticated()) {
+      const pomodoros = await pomodoroModel.find();
+      response.send(pomodoros);
+    } else {
+      response.sendStatus(401);
+    }
   };
 
   create: express.Handler = async (request, response) => {
