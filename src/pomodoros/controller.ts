@@ -2,6 +2,8 @@ import * as express from "express";
 import { Pomodoro } from "./Pomodoro";
 import { Controller } from "../types/Controller";
 import { pomodoroModel } from "./model";
+import { validationMiddleware } from "../middlewares/validationMiddleware";
+import { createPomodoroValidationSchema } from "./validation";
 
 export class PomodorosController implements Controller {
   public path = "/pomodoros";
@@ -13,7 +15,11 @@ export class PomodorosController implements Controller {
 
   public initializeRoutes() {
     this.router.get(this.path, this.getAll);
-    this.router.post(this.path, this.create);
+    this.router.post(
+      this.path,
+      validationMiddleware(createPomodoroValidationSchema),
+      this.create
+    );
   }
 
   getAll: express.Handler = async (request, response) => {

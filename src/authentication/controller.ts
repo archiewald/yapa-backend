@@ -4,6 +4,8 @@ import { Controller } from "../types/Controller";
 import { userModel } from "../users/model";
 import * as passport from "passport";
 import { User } from "../users/User";
+import { validationMiddleware } from "../middlewares/validationMiddleware";
+import { authValidationSchema } from "./validation";
 
 export class AuthenticationController implements Controller {
   public path = "/auth";
@@ -16,12 +18,12 @@ export class AuthenticationController implements Controller {
   public initializeRoutes() {
     this.router.post(
       `${this.path}/register`,
-      //   validationMiddleware(CreateUserDto),
+      validationMiddleware(authValidationSchema),
       this.register
     );
     this.router.post(
       `${this.path}/login`,
-      //   validationMiddleware(LogInDto),
+      validationMiddleware(authValidationSchema),
       this.login
     );
   }
@@ -35,18 +37,16 @@ export class AuthenticationController implements Controller {
     const userData = request.body;
     if (await userModel.findOne({ email: userData.email })) {
       // TODO: make next function typed better
-      next({
+      return next({
         status: 404,
-        message: `There is a user with email ${userData.email} registered`
+        message: `There is a user with email ${userData.email} registered`,
       });
-
-      return;
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = await userModel.create({
       ...userData,
-      password: hashedPassword
+      password: hashedPassword,
     });
     response.send({ email: user.email, id: user.id });
   };
@@ -57,14 +57,17 @@ export class AuthenticationController implements Controller {
     next: express.NextFunction
   ) => {
     passport.authenticate("local", (error, user, info) => {
-      request.login(user, err => {
+      request.login(user, (err) => {
         if (!user) {
-          response.sendStatus(400);
+          return next({
+            status: 400,
+            message: "Wrong auth data",
+          });
         }
 
         return response.send({
           email: user.email,
-          id: user.id
+          id: user.id,
         });
       });
     })(request, response, next);
