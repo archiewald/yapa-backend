@@ -8,7 +8,12 @@ import { Controller } from "../types/Controller";
 import { userModel } from "../users/model";
 import { User } from "../users/User";
 import { validationMiddleware } from "../middlewares/validationMiddleware";
-import { registerValidationSchema, loginValidationSchema } from "./validation";
+import {
+  registerValidationSchema,
+  loginValidationSchema,
+  confirmEmailValidationSchema,
+  ConfirmEmailDto,
+} from "./validation";
 import { verificationTokenModel } from "./model";
 
 export class AuthenticationController implements Controller {
@@ -29,6 +34,11 @@ export class AuthenticationController implements Controller {
       `${this.path}/login`,
       validationMiddleware(loginValidationSchema),
       this.login
+    );
+    this.router.post(
+      `${this.path}/confirm-email`,
+      validationMiddleware(confirmEmailValidationSchema),
+      this.confirmEmail
     );
   }
 
@@ -104,5 +114,29 @@ export class AuthenticationController implements Controller {
         });
       });
     })(request, response, next);
+  };
+
+  private confirmEmail = async (
+    request: express.Request,
+    response: express.Response,
+    next: express.NextFunction
+  ) => {
+    const { token: tokenValue } = request.body;
+
+    const token = await verificationTokenModel.findOne({ value: tokenValue });
+
+    if (!token) {
+      return next({
+        status: 400,
+        message: "No such token",
+      });
+    }
+
+    const user = await userModel.findByIdAndUpdate(token.userId, {
+      verified: true,
+    });
+    await verificationTokenModel.findByIdAndDelete(token.id);
+
+    return response.send(user);
   };
 }
