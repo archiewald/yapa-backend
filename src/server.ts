@@ -3,7 +3,7 @@ import "dotenv/config";
 import { App } from "./app";
 import { PomodorosController } from "./pomodoros/controller";
 
-import { AuthenticationController } from "./authentication/controller";
+import { AuthenticationController } from "./auth/controller";
 
 const controllers = [new PomodorosController(), new AuthenticationController()];
 
