@@ -1,11 +1,12 @@
 import * as bcrypt from "bcrypt";
 import * as express from "express";
+import * as passport from "passport";
+
 import { Controller } from "../types/Controller";
 import { userModel } from "../users/model";
-import * as passport from "passport";
 import { User } from "../users/User";
 import { validationMiddleware } from "../middlewares/validationMiddleware";
-import { authValidationSchema } from "./validation";
+import { registerValidationSchema, loginValidationSchema } from "./validation";
 
 export class AuthenticationController implements Controller {
   public path = "/auth";
@@ -18,12 +19,12 @@ export class AuthenticationController implements Controller {
   public initializeRoutes() {
     this.router.post(
       `${this.path}/register`,
-      validationMiddleware(authValidationSchema),
+      validationMiddleware(registerValidationSchema),
       this.register
     );
     this.router.post(
       `${this.path}/login`,
-      validationMiddleware(authValidationSchema),
+      validationMiddleware(loginValidationSchema),
       this.login
     );
   }

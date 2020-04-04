@@ -10,6 +10,7 @@ import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { userModel } from "./users/model";
 import { loggerMiddleware } from "./middlewares/logger";
 import { sessionMiddleware } from "./middlewares/sessionMiddleware";
+import { initPassport } from "./passport";
 
 export class App {
   public app: express.Application;
@@ -23,33 +24,7 @@ export class App {
     this.app.use(bodyParser.json());
     this.app.use(cors());
 
-    // configure passport.js to use the local strategy
-    passport.use(
-      new passportLocal.Strategy(
-        { usernameField: "email" },
-        async (email, password, done) => {
-          const user = await userModel.findOne({ email });
-
-          if (!user) {
-            return done(null, false);
-          }
-
-          return done(null, user);
-        }
-      )
-    );
-
-    // tell passport how to serialize the user
-    passport.serializeUser((user: any, done) => {
-      done(null, user);
-    });
-
-    passport.deserializeUser((user, done) => {
-      done(null, user);
-    });
-
-    this.app.use(passport.initialize());
-    this.app.use(passport.session());
+    initPassport(this.app);
 
     this.initializeControllers(controllers);
 
@@ -63,7 +38,7 @@ export class App {
   }
 
   private initializeControllers(controllers: Controller[]) {
-    controllers.forEach(controller => {
+    controllers.forEach((controller) => {
       this.app.use("/", controller.router);
     });
   }
@@ -72,7 +47,7 @@ export class App {
     const { MONGO_URL } = process.env;
 
     mongoose.connect(MONGO_URL!, {
-      useNewUrlParser: true
+      useNewUrlParser: true,
     });
   }
 }

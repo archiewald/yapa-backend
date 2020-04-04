@@ -1,6 +1,11 @@
 import * as Yup from "yup";
 
-export const authValidationSchema = Yup.object({
+export const registerValidationSchema = Yup.object({
   email: Yup.string().email().required(),
   password: Yup.string().min(6).required(),
+});
+
+export const loginValidationSchema = Yup.object({
+  email: Yup.string().email().required(),
+  password: Yup.string().required(),
 });
