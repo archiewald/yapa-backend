@@ -58,7 +58,10 @@ export class AuthenticationController implements Controller {
   ) => {
     passport.authenticate("local", (error, user, info) => {
       request.login(user, err => {
-        console.log({ user, err });
+        if (!user) {
+          response.sendStatus(400);
+        }
+
         return response.send({
           email: user.email,
           id: user.id
