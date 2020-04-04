@@ -1,4 +1,5 @@
 import * as express from "express";
+
 import { Pomodoro } from "./Pomodoro";
 import { Controller } from "../types/Controller";
 import { pomodoroModel } from "./model";
@@ -11,14 +12,14 @@ export class PomodorosController implements Controller {
   public router = express.Router();
 
   constructor() {
-    this.router.use(authMiddleware);
     this.initializeRoutes();
   }
 
   public initializeRoutes() {
-    this.router.get(this.path, this.getAll);
+    this.router.get(this.path, authMiddleware, this.getAll);
     this.router.post(
       this.path,
+      authMiddleware,
       validationMiddleware(createPomodoroValidationSchema),
       this.create
     );

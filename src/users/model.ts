@@ -3,7 +3,8 @@ import { User } from "./User";
 
 const userSchema = new mongoose.Schema({
   email: String,
-  password: String
+  password: String,
+  verified: { type: Boolean, default: false },
 });
 
 export const userModel = mongoose.model<User & mongoose.Document>(

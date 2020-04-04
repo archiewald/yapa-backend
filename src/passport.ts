@@ -13,7 +13,7 @@ export function initPassport(app: express.Application) {
       async (email, password, done) => {
         const user = await userModel.findOne({ email });
 
-        if (!user) {
+        if (!user || !user.verified) {
           return done(null, false);
         }
 
