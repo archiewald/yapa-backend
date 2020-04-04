@@ -4,12 +4,14 @@ import { Controller } from "../types/Controller";
 import { pomodoroModel } from "./model";
 import { validationMiddleware } from "../middlewares/validationMiddleware";
 import { createPomodoroValidationSchema } from "./validation";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 export class PomodorosController implements Controller {
   public path = "/pomodoros";
   public router = express.Router();
 
   constructor() {
+    this.router.use(authMiddleware);
     this.initializeRoutes();
   }
 
@@ -22,13 +24,9 @@ export class PomodorosController implements Controller {
     );
   }
 
-  getAll: express.Handler = async (request, response) => {
-    if (request.isAuthenticated()) {
-      const pomodoros = await pomodoroModel.find();
-      response.send(pomodoros);
-    } else {
-      response.sendStatus(401);
-    }
+  getAll: express.Handler = async (_request, response) => {
+    const pomodoros = await pomodoroModel.find();
+    response.send(pomodoros);
   };
 
   create: express.Handler = async (request, response) => {

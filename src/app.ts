@@ -8,7 +8,7 @@ import * as cors from "cors";
 import { Controller } from "./types/Controller";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { userModel } from "./users/model";
-import { loggerMiddleware } from "./middlewares/logger";
+import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 import { sessionMiddleware } from "./middlewares/sessionMiddleware";
 import { initPassport } from "./passport";
 
