@@ -1,9 +1,23 @@
 import * as nodemailer from "nodemailer";
+import * as sgTransport from "nodemailer-sendgrid-transport";
 import Mail from "nodemailer/lib/mailer";
 
 let transporter: Mail;
 
 export async function initMailer() {
+  if (process.env.NODE_ENV === "production") {
+    transporter = nodemailer.createTransport(
+      sgTransport({
+        auth: {
+          api_user: "SENDGRID_USERNAME",
+          api_key: "SENDGRID_PASSWORD",
+        },
+      })
+    );
+
+    return;
+  }
+
   const testAccount = await nodemailer.createTestAccount();
   transporter = nodemailer.createTransport({
     host: "smtp.ethereal.email",
