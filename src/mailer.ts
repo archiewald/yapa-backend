@@ -6,11 +6,12 @@ let transporter: Mail;
 
 export async function initMailer() {
   if (process.env.NODE_ENV === "production") {
+    const { SENDGRID_PASSWORD, SENDGRID_USERNAME } = process.env;
     transporter = nodemailer.createTransport(
       sgTransport({
         auth: {
-          api_user: "SENDGRID_USERNAME",
-          api_key: "SENDGRID_PASSWORD",
+          api_user: SENDGRID_USERNAME,
+          api_key: SENDGRID_PASSWORD,
         },
       })
     );
@@ -33,7 +34,7 @@ export async function initMailer() {
 export async function sendMail(options: Omit<Mail.Options, "from">) {
   const info = await transporter.sendMail({
     ...options,
-    from: '"🍅 Yet Another Pomodoro App" <yapa@kozubek.dev>', // sender address
+    from: "🍅 Yet Another Pomodoro App <yapa@kozubek.dev>", // sender address
   });
 
   console.debug("Message sent: %s", info.messageId);
