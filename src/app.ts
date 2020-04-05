@@ -1,16 +1,14 @@
 import * as express from "express";
 import * as mongoose from "mongoose";
-import * as passport from "passport";
-import * as passportLocal from "passport-local";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 
 import { Controller } from "./types/Controller";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
-import { userModel } from "./users/model";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 import { sessionMiddleware } from "./middlewares/sessionMiddleware";
 import { initPassport } from "./passport";
+import { initMailer } from "./mailer";
 
 export class App {
   public app: express.Application;
@@ -25,6 +23,7 @@ export class App {
     this.app.use(cors());
 
     initPassport(this.app);
+    initMailer();
 
     this.initializeControllers(controllers);
 
