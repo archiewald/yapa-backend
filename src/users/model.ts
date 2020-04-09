@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
   verified: { type: Boolean, default: false },
 });
 
-export const userModel = mongoose.model<User & mongoose.Document>(
-  "User",
-  userSchema
-);
+export type MongooseUser = User & mongoose.Document;
+
+export const userModel = mongoose.model<MongooseUser>("User", userSchema);

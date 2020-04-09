@@ -1,11 +1,11 @@
 import * as bcrypt from "bcrypt";
 import * as express from "express";
+import { Response, NextFunction, Request } from "express";
 import * as passport from "passport";
 import * as crypto from "crypto";
 
 import { Controller } from "../types/Controller";
 import { userModel } from "../users/model";
-import { User } from "../users/User";
 import { validationMiddleware } from "../middlewares/validationMiddleware";
 import {
   registerValidationSchema,
@@ -14,6 +14,8 @@ import {
 } from "./validation";
 import { verificationTokenModel } from "./model";
 import { sendMail } from "../mailer";
+import { ValidatedRequest } from "../types/express";
+import { serializeUser, UserSerialized } from "../users/serialize";
 
 export class AuthenticationController implements Controller {
   public path = "/auth";
@@ -42,23 +44,22 @@ export class AuthenticationController implements Controller {
   }
 
   private register = async (
-    request: express.Request,
-    response: express.Response<Omit<User, "password">>,
-    next: express.NextFunction
+    request: ValidatedRequest<typeof registerValidationSchema>,
+    response: Response<UserSerialized>,
+    next: NextFunction
   ) => {
-    // TODO: validate user data
-    const userData = request.body;
-    if (await userModel.findOne({ email: userData.email })) {
+    const { email, password } = request.body;
+    if (await userModel.findOne({ email })) {
       // TODO: make next function typed better
       return next({
         status: 404,
-        message: `There is a user with email ${userData.email} registered`,
+        message: `There is a user with email ${email} registered`,
       });
     }
 
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = await userModel.create({
-      ...userData,
+      email,
       password: hashedPassword,
     });
 
@@ -69,18 +70,18 @@ export class AuthenticationController implements Controller {
     });
 
     await sendMail({
-      to: user.email, // list of receivers
-      subject: "Confirm your account", // Subject line
-      text: `Please confirm your account https://yapa.kozubek.dev/confirm-email/${token.value}`, // plain text body
+      to: user.email,
+      subject: "Confirm your account",
+      text: `Please confirm your account https://yapa.kozubek.dev/confirm-email/${token.value}`,
     });
 
-    response.send({ email: user.email, id: user.id, verified: user.verified });
+    response.send(serializeUser(user));
   };
 
   private login = async (
-    request: express.Request,
-    response: express.Response<Omit<User, "password">>,
-    next: express.NextFunction
+    request: ValidatedRequest<typeof loginValidationSchema>,
+    response: Response<UserSerialized>,
+    next: NextFunction
   ) => {
     passport.authenticate("local", (error, user, info) => {
       request.login(user, (err) => {
@@ -91,19 +92,15 @@ export class AuthenticationController implements Controller {
           });
         }
 
-        return response.send({
-          email: user.email,
-          id: user.id,
-          verified: user.verified,
-        });
+        return response.send(serializeUser(user));
       });
     })(request, response, next);
   };
 
   private confirmEmail = async (
-    request: express.Request,
-    response: express.Response,
-    next: express.NextFunction
+    request: Request,
+    response: Response,
+    next: NextFunction
   ) => {
     const { token: tokenValue } = request.body;
 
@@ -119,8 +116,16 @@ export class AuthenticationController implements Controller {
     const user = await userModel.findByIdAndUpdate(token.userId, {
       verified: true,
     });
+
+    if (!user) {
+      return next({
+        status: 400,
+        message: `User assigned to token ${tokenValue} doesn't exist`,
+      });
+    }
+
     await verificationTokenModel.findByIdAndDelete(token.id);
 
-    return response.send(user);
+    return response.send(serializeUser(user));
   };
 }
