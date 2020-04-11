@@ -1,9 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-
-interface HttpException {
-  status: number;
-  message: string;
-}
+import { HttpException } from "../exceptions/HttpException";
 
 export function errorMiddleware(
   error: HttpException,

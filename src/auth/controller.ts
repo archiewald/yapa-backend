@@ -16,6 +16,7 @@ import { verificationTokenModel } from "./model";
 import { sendMail } from "../mailer";
 import { ValidatedRequest } from "../types/express";
 import { serializeUser, UserSerialized } from "../users/serialize";
+import { HttpException } from "../exceptions/HttpException";
 
 export class AuthenticationController implements Controller {
   public path = "/auth";
@@ -50,11 +51,9 @@ export class AuthenticationController implements Controller {
   ) => {
     const { email, password } = request.body;
     if (await userModel.findOne({ email })) {
-      // TODO: make next function typed better
-      return next({
-        status: 404,
-        message: `There is a user with email ${email} registered`,
-      });
+      return next(
+        new HttpException(400, `There is a user with email ${email} registered`)
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -86,10 +85,7 @@ export class AuthenticationController implements Controller {
     passport.authenticate("local", (error, user, info) => {
       request.login(user, (err) => {
         if (!user) {
-          return next({
-            status: 400,
-            message: "Wrong auth data",
-          });
+          return next(new HttpException(400, "Wrong auth data"));
         }
 
         return response.send(serializeUser(user));
@@ -107,10 +103,9 @@ export class AuthenticationController implements Controller {
     const token = await verificationTokenModel.findOne({ value: tokenValue });
 
     if (!token) {
-      return next({
-        status: 400,
-        message: "No such token",
-      });
+      return next(
+        new HttpException(400, `There is no token with value ${tokenValue}`)
+      );
     }
 
     const user = await userModel.findByIdAndUpdate(token.userId, {
@@ -118,10 +113,12 @@ export class AuthenticationController implements Controller {
     });
 
     if (!user) {
-      return next({
-        status: 400,
-        message: `User assigned to token ${tokenValue} doesn't exist`,
-      });
+      return next(
+        new HttpException(
+          400,
+          `User assigned to token ${tokenValue} doesn't exist`
+        )
+      );
     }
 
     await verificationTokenModel.findByIdAndDelete(token.id);

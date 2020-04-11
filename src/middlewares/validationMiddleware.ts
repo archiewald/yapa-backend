@@ -1,6 +1,8 @@
 import * as express from "express";
 import * as Yup from "yup";
 
+import { HttpException } from "../exceptions/HttpException";
+
 export function validationMiddleware(
   schema: Yup.ObjectSchema
 ): express.RequestHandler {
@@ -9,10 +11,7 @@ export function validationMiddleware(
       .validate(request.body, { abortEarly: false })
       .then(() => next())
       .catch((validationError: Yup.ValidationError) =>
-        next({
-          status: 400,
-          message: validationError.errors.join(", "),
-        })
+        next(new HttpException(400, validationError.errors.join(", ")))
       );
   };
 }
