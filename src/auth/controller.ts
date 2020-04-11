@@ -62,7 +62,6 @@ export class AuthenticationController implements Controller {
       password: hashedPassword,
     });
 
-    // TODO: add types to mongoose models
     const token = await verificationTokenModel.create({
       userId: user.id,
       value: crypto.randomBytes(16).toString("hex"),
@@ -82,6 +81,7 @@ export class AuthenticationController implements Controller {
     response: Response<UserSerialized>,
     next: NextFunction
   ) => {
+    // TODO: handle errors
     passport.authenticate("local", (error, user, info) => {
       request.login(user, (err) => {
         if (!user) {
@@ -94,8 +94,8 @@ export class AuthenticationController implements Controller {
   };
 
   private confirmEmail = async (
-    request: Request,
-    response: Response,
+    request: ValidatedRequest<typeof confirmEmailValidationSchema>,
+    response: Response<UserSerialized>,
     next: NextFunction
   ) => {
     const { token: tokenValue } = request.body;

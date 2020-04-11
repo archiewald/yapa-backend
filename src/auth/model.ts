@@ -3,8 +3,8 @@ import { string } from "yup";
 import { VerificationToken } from "./VerificationToken";
 
 const verificationTokenSchema = new mongoose.Schema<VerificationToken>({
-  userId: String,
-  value: String,
+  userId: { type: String, required: true },
+  value: { type: String, required: true },
   createdAt: {
     type: Date,
     expires: 60 * 60 * 24,

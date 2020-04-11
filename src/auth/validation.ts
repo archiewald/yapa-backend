@@ -13,8 +13,3 @@ export const loginValidationSchema = Yup.object({
 export const confirmEmailValidationSchema = Yup.object({
   token: Yup.string().required(),
 });
-
-// TODO: use it
-export type ConfirmEmailDto = Yup.InferType<
-  typeof confirmEmailValidationSchema
->;
