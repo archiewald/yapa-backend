@@ -20,7 +20,7 @@ export class App {
     this.app.use(sessionMiddleware());
     this.app.use(loggerMiddleware);
     this.app.use(bodyParser.json());
-    this.app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+    this.app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
     initPassport(this.app);
     initMailer();
