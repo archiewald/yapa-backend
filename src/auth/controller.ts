@@ -42,7 +42,6 @@ export class AuthenticationController implements Controller {
       validationMiddleware(confirmEmailValidationSchema),
       this.confirmEmail
     );
-    this.router.get(`${this.path}/get-user`, this.getUser);
   }
 
   private register = async (
@@ -125,18 +124,5 @@ export class AuthenticationController implements Controller {
     await verificationTokenModel.findByIdAndDelete(token.id);
 
     return response.send(serializeUser(user));
-  };
-
-  private getUser = async (
-    request: Request,
-    response: Response<UserSerialized | null>,
-    next: NextFunction
-  ) => {
-    const { user } = request;
-    debugger;
-
-    console.log({ user });
-
-    return response.send(user ? serializeUser(user as any) : null);
   };
 }

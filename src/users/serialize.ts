@@ -8,5 +8,6 @@ export function serializeUser(user: MongooseUser): UserSerialized {
     id: user.id as string,
     email: user.email,
     verified: user.verified,
+    settings: user.settings,
   };
 }
