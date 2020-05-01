@@ -3,4 +3,5 @@ export interface Pomodoro {
   userId: string;
   startDate: string;
   duration: number;
+  tags: Array<string>;
 }

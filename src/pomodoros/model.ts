@@ -5,9 +5,12 @@ const pomodoroSchema = new mongoose.Schema<Pomodoro>({
   userId: { type: String, required: true },
   startDate: { type: String, required: true },
   duration: { type: Number, required: true },
+  tags: [{ type: String }],
 });
 
-export const pomodoroModel = mongoose.model<Pomodoro & mongoose.Document>(
+export type MongoosePomodoro = Pomodoro & mongoose.Document;
+
+export const pomodoroModel = mongoose.model<MongoosePomodoro>(
   "pomodoro",
   pomodoroSchema
 );
