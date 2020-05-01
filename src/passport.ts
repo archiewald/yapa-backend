@@ -25,10 +25,11 @@ export function initPassport(app: express.Application) {
 
   // tell passport how to serialize the user
   passport.serializeUser((user: any, done) => {
-    done(null, user);
+    done(null, user.id);
   });
 
-  passport.deserializeUser((user, done) => {
+  passport.deserializeUser(async (id, done) => {
+    const user = await userModel.findById(id);
     done(null, user);
   });
 

@@ -6,9 +6,11 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   verified: { type: Boolean, default: false },
   settings: {
-    pomodoroTime: { type: Number, default: 25 },
-    shortBreakTime: { type: Number, default: 5 },
-    longBreakTime: { type: Number, default: 15 },
+    timer: {
+      pomodoro: { type: Number, default: 25 },
+      shortBreak: { type: Number, default: 5 },
+      longBreak: { type: Number, default: 15 },
+    },
   },
 });
 

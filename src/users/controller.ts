@@ -3,11 +3,9 @@ import * as express from "express";
 
 import { Controller } from "../types/Controller";
 import { UserSerialized, serializeUser } from "./serialize";
-import { validationMiddleware } from "../middlewares/validationMiddleware";
 import { ValidatedRequest } from "../types/express";
 import { setSettingsValidationSchema } from "./validation";
-import { userModel } from "./model";
-import { User } from "./User";
+import { userModel, MongooseUser } from "./model";
 
 export class UsersController implements Controller {
   public router = express.Router();
@@ -39,8 +37,13 @@ export class UsersController implements Controller {
     const settings = request.body;
 
     const user = await userModel.findByIdAndUpdate(
-      (passportUser as User).id,
-      settings
+      (passportUser as MongooseUser).id,
+      {
+        $set: {
+          settings,
+        },
+      },
+      { new: true }
     );
     return response.send(serializeUser(user!));
   };

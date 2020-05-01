@@ -1,3 +1,5 @@
+export type TimerMode = "pomodoro" | "shortBreak" | "longBreak";
+
 export interface User {
   id: string;
   email: string;
@@ -7,7 +9,5 @@ export interface User {
 }
 
 export interface UserSettings {
-  pomodoroTime: number;
-  shortBreakTime: number;
-  longBreakTime: number;
+  timer: { [Mode in TimerMode]: number };
 }
