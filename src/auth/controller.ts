@@ -37,6 +37,7 @@ export class AuthenticationController implements Controller {
       validationMiddleware(loginValidationSchema),
       this.login
     );
+    this.router.post(`${this.path}/logout`, this.logout);
     this.router.post(
       `${this.path}/confirm-email`,
       validationMiddleware(confirmEmailValidationSchema),
@@ -91,6 +92,13 @@ export class AuthenticationController implements Controller {
         return response.send(serializeUser(user));
       });
     })(request, response, next);
+  };
+
+  private logout = async (request: Request, response: Response) => {
+    request.session?.destroy(() => {
+      response.clearCookie("connect.sid");
+      response.sendStatus(200);
+    });
   };
 
   private confirmEmail = async (
