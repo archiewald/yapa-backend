@@ -1,5 +1,5 @@
 import * as express from "express";
-import { Response, Request } from "express";
+import { Response } from "express";
 
 import { Controller } from "../types/Controller";
 import { pomodoroModel } from "./model";
