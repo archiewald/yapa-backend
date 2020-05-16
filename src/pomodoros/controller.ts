@@ -1,5 +1,5 @@
 import * as express from "express";
-import { Response } from "express";
+import { Response, Request } from "express";
 
 import { Controller } from "../types/Controller";
 import { pomodoroModel } from "./model";
@@ -28,7 +28,10 @@ export class PomodorosController implements Controller {
     );
   }
 
-  getAll: express.Handler = async (request, response) => {
+  getAll = async (
+    request: Request,
+    response: Response<PomodoroSerialized[]>
+  ) => {
     const { user } = request;
 
     const pomodoros = await pomodoroModel.find({

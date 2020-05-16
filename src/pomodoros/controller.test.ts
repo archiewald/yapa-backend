@@ -1,13 +1,15 @@
 import * as express from "express";
+import { Response, Request } from "express";
+
 import { PomodorosController } from "./controller";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { validationMiddleware } from "../middlewares/validationMiddleware";
-import { createPomodoroValidationSchema } from "./validation";
+import { ValidatedRequest } from "../types/express";
+import { pomodoroModel } from "./model";
 
 jest.mock("../middlewares/authMiddleware");
+jest.mock("./serialize");
 
 const validationMiddlewareHandlerMock = jest.fn();
-// const validationMiddlewareMock = jest.fn(() => validationMiddlewareHandler);
 jest.mock("../middlewares/validationMiddleware", () => ({
   validationMiddleware: () => validationMiddlewareHandlerMock,
 }));
@@ -47,7 +49,7 @@ describe("PomodorosController", () => {
       );
     });
 
-    it("should initialize get pomodoros with authMiddleware and create method", () => {
+    it("should initialize get pomodoros with authMiddleware, validationMiddleware and create method", () => {
       pomodorosController.initializeRoutes();
 
       expect(routerPostMock).toBeCalledWith(
@@ -56,6 +58,29 @@ describe("PomodorosController", () => {
         validationMiddlewareHandlerMock,
         pomodorosController.create
       );
+    });
+  });
+
+  describe("create", () => {
+    it("should save pomodoro in database", async () => {
+      const mockedPomodoroData = {
+        date: "MOCKED_DATE",
+      };
+
+      const mockedRequest = ({
+        user: { id: "MOCKED_ID" },
+        body: mockedPomodoroData,
+      } as unknown) as Request;
+
+      const sendMock = jest.fn();
+      const mockedResponse = ({ send: sendMock } as unknown) as Response<any>;
+
+      await pomodorosController.create(mockedRequest, mockedResponse);
+
+      expect(pomodoroModel.create).toBeCalledWith({
+        ...mockedPomodoroData,
+        userId: "MOCKED_ID",
+      });
     });
   });
 });
