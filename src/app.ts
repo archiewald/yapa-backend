@@ -25,6 +25,7 @@ export class App {
     initPassport(this.app);
     initMailer();
 
+    this.app.get("/", (_request, response) => response.send("🍅"));
     this.initializeControllers(controllers);
 
     this.app.use(errorMiddleware);
