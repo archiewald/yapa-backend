@@ -16,7 +16,7 @@ export class App {
   constructor(controllers: Controller[]) {
     this.app = express();
     this.connectToTheDatabase();
-
+    this.app.set("trust proxy", 1);
     this.app.use(sessionMiddleware());
     this.app.use(loggerMiddleware);
     this.app.use(bodyParser.json());
