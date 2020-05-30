@@ -21,12 +21,6 @@ export class App {
     this.app.use(loggerMiddleware);
     this.app.use(bodyParser.json());
     this.app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
-    // this.app.use(
-    //   cors({
-    //     origin: "*",
-    //     credentials: true,
-    //   })
-    // );
 
     initPassport(this.app);
     initMailer();
