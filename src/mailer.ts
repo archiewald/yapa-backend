@@ -1,17 +1,17 @@
 import * as nodemailer from "nodemailer";
-import * as sgTransport from "nodemailer-sendgrid-transport";
+import * as mgTransport from "nodemailer-mailgun-transport";
 import Mail from "nodemailer/lib/mailer";
 
 let transporter: Mail;
 
 export async function initMailer() {
   if (process.env.NODE_ENV === "production") {
-    const { SENDGRID_PASSWORD, SENDGRID_USERNAME } = process.env;
+    const { MAILGUN_API_KEY, MAILGUN_DOMAIN } = process.env;
     transporter = nodemailer.createTransport(
-      sgTransport({
+      mgTransport({
         auth: {
-          api_user: SENDGRID_USERNAME,
-          api_key: SENDGRID_PASSWORD,
+          domain: MAILGUN_DOMAIN!,
+          api_key: MAILGUN_API_KEY!,
         },
       })
     );
