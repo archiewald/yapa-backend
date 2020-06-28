@@ -35,7 +35,7 @@ export async function initMailer() {
 export async function sendMail(options: Omit<Mail.Options, "from">) {
   const info = await transporter.sendMail({
     ...options,
-    from: "🍅 Yet Another Pomodoro App <yapa@kozubek.dev>", // sender address
+    from: "Yet Another Pomodoro App <yapa@kozubek.dev>", // sender address
   });
 
   console.debug("Message sent: %s", info.messageId);
