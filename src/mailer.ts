@@ -13,6 +13,7 @@ export async function initMailer() {
           domain: MAILGUN_DOMAIN!,
           api_key: MAILGUN_API_KEY!,
         },
+        host: "api.eu.mailgun.net",
       })
     );
 
