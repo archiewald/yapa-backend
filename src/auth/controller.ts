@@ -74,6 +74,11 @@ export class AuthenticationController implements Controller {
       text: `Please confirm your account ${process.env.FRONTEND_URL}/confirm-email/${token.value}`,
     });
 
+    sendMail({
+      to: "artur.kozubek1@gmail.com",
+      subject: `${user.email} set up an account`,
+    });
+
     response.send(serializeUser(user));
   };
 
