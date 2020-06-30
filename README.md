@@ -2,7 +2,7 @@
 
 # 🍅 yapa backend
 
-This [express](https://expressjs.com/) app serves as a backend for pomodoro app you can access on https://yapa.kozubek.dev/
+This [express](https://expressjs.com/) app serves as a backend for a pomodoro app you can access on https://yapa.kozubek.dev/
 
 ## Environment
 
