@@ -68,16 +68,18 @@ export class AuthenticationController implements Controller {
       value: crypto.randomBytes(16).toString("hex"),
     });
 
-    await sendMail({
-      to: user.email,
-      subject: "🍅 Confirm your account",
-      text: `Please confirm your account ${process.env.FRONTEND_URL}/confirm-email/${token.value}`,
-    });
+    await Promise.all([
+      sendMail({
+        to: user.email,
+        subject: "🍅 Confirm your account",
+        text: `Please confirm your account ${process.env.FRONTEND_URL}/confirm-email/${token.value}`,
+      }),
 
-    sendMail({
-      to: "artur.kozubek1@gmail.com",
-      subject: `${user.email} set up an account`,
-    });
+      sendMail({
+        to: "artur.kozubek1@gmail.com",
+        subject: `${user.email} set up an account`,
+      }),
+    ]);
 
     response.send(serializeUser(user));
   };
