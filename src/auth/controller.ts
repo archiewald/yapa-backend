@@ -78,6 +78,7 @@ export class AuthenticationController implements Controller {
       sendMail({
         to: "artur.kozubek1@gmail.com",
         subject: `${user.email} set up an account`,
+        text: "💪",
       }),
     ]);
 
