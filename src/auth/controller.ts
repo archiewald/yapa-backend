@@ -72,7 +72,7 @@ export class AuthenticationController implements Controller {
       sendMail({
         to: user.email,
         subject: "🍅 Confirm your account",
-        text: `Please confirm your account ${process.env.FRONTEND_URL}/confirm-email/${token.value}`,
+        text: `Great to see you here 🤗! Please confirm your account ${process.env.FRONTEND_URL}/confirm-email/${token.value}`,
       }),
 
       sendMail({
