@@ -10,8 +10,7 @@
     "start": "node build/server.js",
     "start:inspect": "node --inspect build/server.js",
     "start:watch": "nodemon",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --runInBand"
   },
   "author": "",
   "license": "ISC",
@@ -24,12 +23,14 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "mongodb-memory-server": "^6.6.7",
     "mongoose": "^5.9.5",
     "nodemailer": "^6.4.6",
     "nodemailer-mailgun-transport": "^2.0.0",
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "supertest": "^4.0.2",
     "yup": "^0.28.3"
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "@types/nodemailer": "^6.4.0",
     "@types/passport": "^1.0.3",
     "@types/passport-local": "^1.0.33",
+    "@types/supertest": "^2.0.10",
     "@types/yup": "^0.26.34",
     "jest": "^26.0.1",
     "ts-jest": "^26.0.0",

@@ -5,7 +5,7 @@ import * as passport from "passport";
 import * as crypto from "crypto";
 
 import { Controller } from "../types/Controller";
-import { userModel, MongooseUser } from "../users/model";
+import { userModel } from "../users/model";
 import { validationMiddleware } from "../middlewares/validationMiddleware";
 import {
   registerValidationSchema,
