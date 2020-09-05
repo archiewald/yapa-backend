@@ -1,13 +1,20 @@
-import { MongoMemoryServer } from "mongodb-memory-server";
-import * as mongoose from "mongoose";
 import * as supertest from "supertest";
+import * as express from "express";
 
-import { Server } from "../app";
 import { userModel } from "../users/model";
 import { sendMail } from "../mailer";
 import { E2eSetup } from "../test/E2eSetup";
 
 jest.mock("../mailer.ts");
+jest.mock("../middlewares/loggerMiddleware.ts", () => ({
+  loggerMiddleware: (
+    _request: express.Request,
+    _response: express.Response,
+    next: express.NextFunction
+  ) => {
+    next();
+  },
+}));
 
 describe("/auth/register", () => {
   let e2eSetup: E2eSetup;
@@ -65,8 +72,10 @@ describe("/auth/register", () => {
   });
 
   it("should not allow to invite the same user twice", async () => {
-    // given, when
+    // given
     const successResponse = await registerUser();
+
+    // when
     const failedResponse = await registerUser();
 
     // then

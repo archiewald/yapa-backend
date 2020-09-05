@@ -1,3 +1,4 @@
+import * as express from "express";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import * as supertest from "supertest";
 import * as mongoose from "mongoose";
@@ -6,6 +7,7 @@ import { Server } from "../app";
 export class E2eSetup {
   mongoServer: MongoMemoryServer;
   request!: supertest.SuperTest<supertest.Test>;
+  app!: express.Application;
 
   constructor() {
     this.mongoServer = new MongoMemoryServer();
@@ -13,8 +15,14 @@ export class E2eSetup {
 
   async init() {
     const mongoUrl = await this.mongoServer.getUri();
-    await mongoose.connect(mongoUrl);
-    this.request = supertest(new Server(mongoUrl).app);
+    await mongoose.connect(mongoUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    });
+    this.app = new Server(mongoUrl).app;
+    this.request = supertest(this.app);
     return this;
   }
 
