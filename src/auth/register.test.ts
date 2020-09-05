@@ -73,14 +73,13 @@ describe("/auth/register", () => {
 
   it("should not allow to register the same user twice", async () => {
     // given
-    const successResponse = await registerUser();
+    await registerUser();
 
     // when
-    const failedResponse = await registerUser();
+    const response = await registerUser();
 
     // then
-    expect(successResponse.status).toBe(200);
-    expect(failedResponse.status).toBe(400);
+    expect(response.status).toBe(400);
   });
 
   async function registerUser(params?: { email?: string; password?: string }) {
