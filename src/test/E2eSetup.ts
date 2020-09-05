@@ -1,6 +1,8 @@
 import * as express from "express";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import * as supertest from "supertest";
+// TODO: add d.ts
+const supertestSession = require("supertest-session");
 import * as mongoose from "mongoose";
 import { Server } from "../app";
 
@@ -22,7 +24,7 @@ export class E2eSetup {
       useFindAndModify: false,
     });
     this.app = new Server(mongoUrl).app;
-    this.request = supertest(this.app);
+    this.request = supertestSession(this.app);
     return this;
   }
 

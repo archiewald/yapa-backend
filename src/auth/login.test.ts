@@ -59,7 +59,7 @@ describe("/auth/login", () => {
     expect(response.status).toBe(200);
   });
 
-  it("should not login if user is registered and verified but password wrong", async () => {
+  it("should not login if user is registered and verified but password is wrong", async () => {
     // given
     await registerUser();
     await verifyUser();
@@ -69,6 +69,32 @@ describe("/auth/login", () => {
 
     // then
     expect(response.status).toBe(400);
+  });
+
+  it("should not load user if not logged in", async () => {
+    // given
+    await registerUser();
+    await verifyUser();
+    // ... but not logged in
+
+    // when
+    const response = await getUser();
+
+    // then
+    expect(response.body).toEqual({});
+  });
+
+  it("should load user if logged in", async () => {
+    // given
+    await registerUser();
+    await verifyUser();
+    await loginUser();
+
+    // when
+    const response = await getUser();
+
+    // then
+    expect(response.body).toMatchObject({ email: "artur@kozubek.dev" });
   });
 
   async function loginUser(params?: { email?: string; password?: string }) {
@@ -91,5 +117,9 @@ describe("/auth/login", () => {
       { email: "artur@kozubek.dev" },
       { verified: true }
     );
+  }
+
+  async function getUser() {
+    return request.get("/user");
   }
 });

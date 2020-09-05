@@ -31,6 +31,7 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "supertest": "^4.0.2",
+    "supertest-session": "^4.0.0",
     "yup": "^0.28.3"
   },
   "devDependencies": {

@@ -53,7 +53,7 @@ describe("/auth/register", () => {
     expect(typeof user?.password).not.toBe("password"); // hashed password ;)
   });
 
-  it("should send an invitation email", async () => {
+  it("should send an invitation email to user", async () => {
     // given, when
     await registerUser();
 
@@ -71,7 +71,7 @@ describe("/auth/register", () => {
     expect(response.status).toBe(400);
   });
 
-  it("should not allow to invite the same user twice", async () => {
+  it("should not allow to register the same user twice", async () => {
     // given
     const successResponse = await registerUser();
 
