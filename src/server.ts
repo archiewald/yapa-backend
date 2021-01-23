@@ -1,18 +1,17 @@
 import "dotenv/config";
+import * as mongoose from "mongoose";
 
-import { App } from "./app";
-import { PomodorosController } from "./pomodoros/controller";
+import { Server } from "./app";
 
-import { AuthenticationController } from "./auth/controller";
-import { UsersController } from "./users/controller";
-import { TagsController } from "./tags/controller";
+const mongoUrl = process.env.MONGO_URL!;
 
-const controllers = [
-  new PomodorosController(),
-  new AuthenticationController(),
-  new UsersController(),
-  new TagsController(),
-];
+mongoose.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
 
-const app = new App(controllers);
-app.listen(process.env.PORT!);
+const server = new Server(mongoUrl);
+
+server.listen(process.env.PORT!);

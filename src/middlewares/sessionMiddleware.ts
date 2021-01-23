@@ -3,10 +3,10 @@ import * as connectMongo from "connect-mongo";
 
 const MongoStore = connectMongo(session);
 
-export function sessionMiddleware() {
+export function sessionMiddleware(mongoUrl: string) {
   return session({
     store: new MongoStore({
-      url: process.env.MONGO_URL!,
+      url: mongoUrl,
     }),
     secret: "secret",
     resave: false,

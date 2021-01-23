@@ -1,23 +1,28 @@
 import * as express from "express";
-import * as mongoose from "mongoose";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 
 import { Controller } from "./types/Controller";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware";
-import { sessionMiddleware } from "./middlewares/sessionMiddleware";
 import { initPassport } from "./passport";
 import { initMailer } from "./mailer";
+import { PomodorosController } from "./pomodoros/controller";
+import { AuthenticationController } from "./auth/controller";
+import { UsersController } from "./users/controller";
+import { TagsController } from "./tags/controller";
+import { sessionMiddleware } from "./middlewares/sessionMiddleware";
 
-export class App {
+export class Server {
   public app: express.Application;
+  private mongoUrl: string;
 
-  constructor(controllers: Controller[]) {
+  constructor(mongoUrl: string) {
     this.app = express();
-    this.connectToTheDatabase();
+    this.mongoUrl = mongoUrl;
+
     this.app.set("trust proxy", 1);
-    this.app.use(sessionMiddleware());
+    this.app.use(sessionMiddleware(this.mongoUrl));
     this.app.use(loggerMiddleware);
     this.app.use(bodyParser.json());
     this.app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
@@ -26,7 +31,12 @@ export class App {
     initMailer();
 
     this.app.get("/", (_request, response) => response.send("🍅"));
-    this.initializeControllers(controllers);
+    this.initializeControllers([
+      new PomodorosController(),
+      new AuthenticationController(),
+      new UsersController(),
+      new TagsController(),
+    ]);
 
     this.app.use(errorMiddleware);
   }
@@ -40,14 +50,6 @@ export class App {
   private initializeControllers(controllers: Controller[]) {
     controllers.forEach((controller) => {
       this.app.use("/", controller.router);
-    });
-  }
-
-  private connectToTheDatabase() {
-    const { MONGO_URL } = process.env;
-
-    mongoose.connect(MONGO_URL!, {
-      useNewUrlParser: true,
     });
   }
 }

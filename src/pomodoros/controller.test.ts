@@ -27,7 +27,7 @@ jest.mock("express", () => {
   };
 });
 
-describe("PomodorosController", () => {
+xdescribe("PomodorosController", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
